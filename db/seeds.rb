@@ -1,6 +1,7 @@
 20.times do 
     User.create(
-        username: Faker::Internet.username
+        username: Faker::Internet.username,
+        password: Faker::Internet.username
     )
 end
 

@@ -5,38 +5,37 @@ class Review < ActiveRecord::Base
   
 
   def print_review_details
-    # binding.pry
-    puts "name: #{self.dental_hygienist.name}, star rating: #{self.star_review}, review: #{self.comment_review}"
+    "name: #{self.dental_hygienist.name}, star rating: #{self.star_review}, review: #{self.comment_review}"
   end
 
-  def self.find_reviews_by_location(user_input) #takes a location
+  def self.find_reviews_by_location(user_input) 
     array = DentalHygienist.find_hygienists_by_location(user_input).map {|hyg| hyg.id}
      
     new_array = array.map{|id| Review.find_by({dental_hygienist_id:id})}
-    #produces an array of instances^
-    # binding.pry
-    new_array2 = new_array.map{|review| review.print_review_details}
-    #using method above, puts array of strings of info user wants to see from instance^
     
-    if new_array.length <= 0
-      puts "There are no reviews for hygienists in this location yet."
-    else
+    if new_array.length >=2 || new_array[0] != nil
+      new_array2 = new_array.map{|review| review.print_review_details}
       puts new_array2
+    else
+
+    puts "There are no reviews for hygienists in that location yet"
+    
     end  
   end
 
   def self.find_reviews_by_name(user_input)
-    array = DentalHygienist.find_hygienists_by_name(user_input).map {|hyg| hyg.id}
+    hygienist = DentalHygienist.find_hygienist_by_name(user_input)
      
-    new_array = array.map{|id| Review.find_by({dental_hygienist_id:id})}
-    #this produces an array of instances^
-    new_array2 = new_array.map{|review| review.print_review_details}
-    #using the method above, prints out just the bits the user wants to see from instance
+    array = Review.where(dental_hygienist_id: hygienist.id)
+     
+  
+    new_array = array.map{|review| review.print_review_details}
+    
     
     if new_array.length <= 0
-      puts "There are no reviews for hygienists in this location yet."
+      puts "There are no reviews for this hygienist yet."
     else
-      puts new_array2
+      puts new_array
     end  
 
 

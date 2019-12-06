@@ -15,19 +15,16 @@ class DentalHygienist < ActiveRecord::Base
       self.where(location: user_input)
     end
 
-    def self.find_hygienists_by_name(user_input)
-      self.where(name: user_input)
+    def self.find_hygienist_by_name(user_input)
+      DentalHygienist.find_by(name: user_input)
     end
 
-    #def most_reviews
-     # DentalHygienist.all.max_by{|dh| dh.reviews.length}
-    #end
+    def self.hygienists_with(number)
+      self.all.select{|dh| dh.star_reviews.include?(number)}
+    end
 
-    #def average_star_rating(dental_hygienist)
-     # array = DentalHygienist.fourth.reviews.map{|review| review.star_review}
-      #average = array.inject{|sum,n| sum+n} / array.length
-    #end
-
-    #CLEAR THE ABOVE METHODS BEFORE THE TEST.
+    def star_reviews
+      self.reviews.map {|review| review.star_review}
+    end
 
 end
